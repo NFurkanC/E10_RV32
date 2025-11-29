@@ -1,8 +1,11 @@
+`include "rv32_opcodes.vh"
 //for now we'll use pc as our first fetch reg. on phase 2, we'll implement prefetch buffer.
 module fetch (
   input clk_i,
   input rst_i,
   input [31:0]        instr_fetch_in,
+  input wire          pc_w_en,
+  input wire [31:0]   reg_pc_in,
   output reg [31:0]   reg_pc_out,
   output reg [31:0]   instr_decode_out
 );
@@ -10,6 +13,10 @@ module fetch (
     if (rst_i) begin // if reset is triggered zero out the program counter
         reg_pc_out <= 32'h00000000;
         instr_decode_out <= 32'b0;
+    end
+
+    if (pc_w_en) begin
+      assign reg_pc_out = reg_pc_in;
     end
     else begin
       instr_decode_out <= instr_fetch_in;
@@ -19,23 +26,20 @@ module fetch (
 endmodule
 
 module decode_1 (
-  input clk_i,
-  output regfile_write_en_out,
-  output [4:0] reg_a_addr_out,
-  output [4:0] reg_b_addr_out,
-  output [4:0] reg_c_addr_out,
-  input [31:0] instr_in,
-  input [31:0] result_in,
-  input [2:0] imm_ext_sel_in,
+  input wire clk_i,
+  input wire rst_i,
+
+  output wire regfile_write_en_out,
+  output wire [4:0] write_reg_addr,
+
+  input reg [31:0] instr_in,
+  input reg [31:0] result_in,
+  input wire [2:0] imm_ext_sel_in,
   output reg [31:0] imm_ext_out,
 );
   
-//given register addresses will be given out by DA, DB, DC for execution
-//rA, rB, rC will be used for writeback and such
-//We'll add 3 addr selection inputs for register file. 
-  
   assign reg_a_addr_out = instr_in[19:15];
-  assign reg_b_addr_out = instr_in[24:20];
+  assign reg_b_addr_out = instr_in[24:20];  
   assign reg_c_addr_out = instr_in[11:7];
   
   always @(*) begin
