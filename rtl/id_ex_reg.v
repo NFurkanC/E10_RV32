@@ -1,3 +1,5 @@
+`include "../include/rv32_opcodes.vh"
+
 module id_ex_reg (
     input wire       clk_i,
     input wire       rst_i,

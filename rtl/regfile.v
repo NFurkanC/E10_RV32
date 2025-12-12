@@ -1,4 +1,6 @@
 //Does not support Compressed Instructions as of now 
+`include "../include/rv32_opcodes.vh"
+
 module regfile(
   input wire clk_i,
   input wire rst_i,

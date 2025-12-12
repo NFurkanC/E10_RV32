@@ -1,4 +1,5 @@
-`import "rv32_opcodes.vh"
+`include "../include/rv32_opcodes.vh"
+
 module ALU_MUX (
     input reg [31:0] pc_ex,
     input reg [31:0] reg_1_in,

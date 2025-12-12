@@ -1,3 +1,5 @@
+//INCOMPLETE - SUBJECT TO CHANGES
+//BARE SKELETON TO FILL FILE STRUCTURE
 module top (
   input clk_i,
   input rst_i

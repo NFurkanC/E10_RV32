@@ -1,4 +1,8 @@
-`include "rv32_opcodes.vh"
+//INCOMPLETE - NEEDS FULL REWRITE
+//FIRST THING TO REWRITE FOR THE PIPELINED STRUCTURE
+//WILL NOT ADD TO RTL FOLDER UNTIL COMPLETED
+
+`include "../include/rv32_opcodes.vh"
 //for now we'll use pc as our first fetch reg. on phase 2, we'll implement prefetch buffer.
 module fetch (
   input clk_i,
