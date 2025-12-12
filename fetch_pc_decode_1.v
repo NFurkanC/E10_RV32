@@ -43,6 +43,7 @@ module decode_1 (
   assign reg_c_addr_out = instr_in[11:7];
   
   always @(*) begin
+    
     case (imm_ext_sel_in)
       3'b0000 : imm_ext_out = {{20{instr_in[31]}}, instr_in[31:20]};
       default : imm_ext_out = 32'b0;
