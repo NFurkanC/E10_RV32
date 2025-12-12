@@ -1,3 +1,4 @@
+`import "rv32_opcodes.vh"
 module ALU_MUX (
     input reg [31:0] pc_ex,
     input reg [31:0] reg_1_in,
@@ -40,5 +41,19 @@ module ALU (
 );
     always @(*) begin
         case (alu_op)
-            5'b00000: 
+            `ALU_ADD: alu_result_out = data_1_in + data_2_in;
+            `ALU_SUB: alu_result_out = data_1_in - data_2_in;
+            `ALU_AND: alu_result_out = data_1_in & data_2_in;
+            `ALU_OR : alu_result_out = data_1_in | data_2_in;
+            `ALU_XOR: alu_result_out = data_1_in ^ data_2_in;
+            `ALU_SLL: alu_result_out = data_1_in << data_2_in[4:0];
+            `ALU_SRL: alu_result_out = data_1_in >> data_2_in[4:0];
+            `ALU_SRA: alu_result_out = $signed(data_1_in) >>> data_2_in[4:0];
+            `ALU_SLT: alu_result_out = ($signed(data_1_in) < $signed(data_2_in)) ? 32'b1 : 32'b0;
+            `ALU_SLTA: alu_result_out = (data_1_in < data_2_in) ? 32'b1 : 32'b0;
+            default: alu_result_out = 32'b0;
+        endcase
+        assign alu_zero_out = (alu_result_out == 32'b0);
+    end 
+
 endmodule
