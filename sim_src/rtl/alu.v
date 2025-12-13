@@ -1,4 +1,24 @@
-`include "../include/rv32_opcodes.vh"
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 16.05.2025 22:09:44
+// Design Name: 
+// Module Name: alu
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+`include "rv32_opcodes.vh"
 
 module ALU_MUX (
     input wire [31:0] pc_ex,

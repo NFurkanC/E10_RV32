@@ -6,7 +6,7 @@ module id_ex_reg (
 
     input wire       flush_ex,
 
-    input      [4:0] alu_op_d,
+    input      [3:0] alu_op_d,
     input reg [31:0] reg_1_d,
     input reg [31:0] reg_2_d,
     input reg [31:0] imm_data_d,
@@ -21,7 +21,7 @@ module id_ex_reg (
 
     //OUTPUTS
     
-    output     [4:0]    alu_op_ex,
+    output     [3:0]    alu_op_ex,
     output reg [31:0]   reg_1_ex,
     output reg [31:0]   reg_2_ex,
     output reg [31:0]   imm_data_ex,
@@ -37,7 +37,7 @@ module id_ex_reg (
 
     always *(posedge(clk_i) or posedge(rst_i)) begin
         if (rst_i || flush_ex) begin
-            alu_op_ex <= 5'b0;
+            alu_op_ex <= 4'b0;
             reg_1_ex <= 32'b0;
             reg_2_ex <= 32'b0;
             imm_data_ex <= 32'b0;
