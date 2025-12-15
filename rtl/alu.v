@@ -12,19 +12,19 @@ module ALU_MUX (
 
     always @(*) begin
         case (alu_mode_select)
-            2'b00: begin //R type
+            `ALU_MUX_R: begin //R type
                 alu_data_1_out <= reg_1_in;
                 alu_data_2_out <= reg_2_in;
             end
-            2'b01: begin //I type
+            `ALU_MUX_I: begin //I type
                 alu_data_1_out <= reg_1_in;
                 alu_data_2_out <= imm_data_in;
             end
-            2'b10: begin //AUIPC
+            `ALU_MUX_AUIPC: begin //AUIPC
                 alu_data_1_out <= pc_ex;
                 alu_data_2_out <= imm_data_in;
             end
-            2'b11: begin //LUI
+            `ALU_MUX_LUI: begin //LUI
                 alu_data_1_out <= pc_ex;
                 alu_data_2_out <= reg_1_in;
             end

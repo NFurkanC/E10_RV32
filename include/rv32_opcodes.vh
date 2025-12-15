@@ -67,4 +67,9 @@
 `define ALU_SLT 4'b1000
 `define ALU_SLTA 4'b1001
 
+`define ALU_MUX_R 2'b00
+`define ALU_MUX_I 2'b01
+`define ALU_MUX_AUIPC 2'b10
+`define ALU_MUX_LUI 2'b11
+
 `endif

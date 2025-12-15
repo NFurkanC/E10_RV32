@@ -7,6 +7,10 @@
 module fetch (
   input clk_i,
   input rst_i,
+
+  input stall_f,
+  input flush_f,
+  
   input [31:0]        instr_fetch_in,
   input wire          pc_w_en,
   input wire [31:0]   reg_pc_in,
@@ -28,32 +32,4 @@ module fetch (
     end
   end
 endmodule
-
-module decode_1 (
-  input wire clk_i,
-  input wire rst_i,
-
-  output wire regfile_write_en_out,
-  output wire [4:0] write_reg_addr,
-
-  input reg [31:0] instr_in,
-  input reg [31:0] result_in,
-  input wire [2:0] imm_ext_sel_in,
-  output reg [31:0] imm_ext_out,
-);
-  
-  assign reg_a_addr_out = instr_in[19:15];
-  assign reg_b_addr_out = instr_in[24:20];  
-  assign reg_c_addr_out = instr_in[11:7];
-  
-  always @(*) begin
-    
-    case (imm_ext_sel_in)
-      3'b0000 : imm_ext_out = {{20{instr_in[31]}}, instr_in[31:20]};
-      default : imm_ext_out = 32'b0;
-    endcase
-  end
-endmodule
-      
-  
   
