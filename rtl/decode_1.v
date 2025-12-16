@@ -81,7 +81,8 @@ module decode_controller (
     output wire       regfile_write_en,
     output reg [31:0] branch_data,
     output reg [31:0] jump_addr,
-    output wire [2:0] result_mux_sel
+    output w`RESULT_MUX_R:0] result_mux_sel,
+    output wire [2:0] lsu_op
 );
 
     //RESULT MUX 
@@ -89,6 +90,11 @@ module decode_controller (
     //001 -> mem access
     //010 -> PC access
     //011 -> Branch access
+
+    //LSU OP
+    //
+    //
+    //
 
     always @(*) begin
         //Latch prevention
@@ -98,6 +104,8 @@ module decode_controller (
         jump_addr = 0;
         alu_mux = 0;
         alu_op = 0;
+        lsu_op = 0;
+        result_mux_sel = 0;
 
         case(instr_in)
         //-----------------R-TYPE-----------------//
@@ -105,61 +113,61 @@ module decode_controller (
             regfile_write_en = 1;
             alu_op = `ALU_ADD;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SUB: begin
             regfile_write_en = 1;
             alu_op = `ALU_SUB;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_AND: begin
             regfile_write_en = 1;
             alu_op = `ALU_AND;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_OR: begin
             regfile_write_en = 1;
             alu_op = `ALU_OR;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_XOR: begin
             regfile_write_en = 1;
             alu_op = `ALU_XOR;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SLL: begin
             regfile_write_en = 1;
             alu_op = `ALU_SLL;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SRL: begin
             regfile_write_en = 1;
             alu_op = `ALU_SRL;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SRA: begin
             regfile_write_en = 1;
             alu_op = `ALU_SRA;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SLT: begin
             regfile_write_en = 1;
             alu_op = `ALU_SLT;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SLTA: begin
             regfile_write_en = 1;
             alu_op = `ALU_SLTA;
             alu_mux = `ALU_MUX_R;
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
 
         //-----------------I-TYPE-----------------//
@@ -168,65 +176,135 @@ module decode_controller (
             alu_op = `ALU_ADD;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SLTI: begin
             regfile_write_en = 1;
             alu_op = `ALU_SLT;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SLTIU: begin
             regfile_write_en = 1;
             alu_op = `ALU_SLTA;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_XORI: begin
             regfile_write_en = 1;
             alu_op = `ALU_XOR;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_ORI: begin
             regfile_write_en = 1;
             alu_op = `ALU_OR;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_ANDI: begin
             regfile_write_en = 1;
             alu_op = `ALU_AND;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SLLI: begin
             regfile_write_en = 1;
             alu_op = `ALU_SLL;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SRLI: begin
             regfile_write_en = 1;
             alu_op = `ALU_SRL;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
         `OP_SRAI: begin
             regfile_write_en = 1;
             alu_op = `ALU_SRA;
             alu_mux = `ALU_MUX_I;
             imm_data = {20{instr_in[31]}, instr_in[31:20]};
-            result_mux_sel = 3'b000;
+            result_mux_sel = `RESULT_MUX_R;
         end
-        //LOAD INSTR
+
+        //-----------------LOAD-INSTRUCTIONS-----------------//
+        `OP_LB: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_LB;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+        `OP_LH: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_LH;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+        `OP_LW: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_LW;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+        `OP_LBU: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_LBU;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+        `OP_LHU: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_LHU;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+
+        //-----------------STORE-INSTRUCTIONS-----------------//
+        `OP_SB: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_SB;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+        `OP_SH: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_SH;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+        `OP_SW: begin
+            mem_write_en = 1;
+            alu_op = `ALU_ADD;
+            alu_mux = `ALU_MUX_I;
+            lsu_op = `LSU_SW;
+            result_mux_sel = `RESULT_MUX_MEM;
+            imm_data = {20{instr_in[31]}, instr_in[31:20]};
+        end
+
+        //-----------------BRANCH-INSTRUCTIONS-----------------//
+        
         endcase 
 
     end

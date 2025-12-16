@@ -72,4 +72,18 @@
 `define ALU_MUX_AUIPC 2'b10
 `define ALU_MUX_LUI 2'b11
 
+`define RESULT_MUX_R 3'b000
+`define RESULT_MUX_MEM 3'b001
+`define RESULT_MUX_PC 3'b010
+`define RESULT_MUX_BR 3'b011
+
+`define LSU_LB 3'b000
+`define LSU_LH 3'b001
+`define LSU_LW 3'b010
+`define LSU_LBU 3'b011
+`define LSU_LHU 3'b100
+`define LSU_SB 3'b101
+`define LSU_SH 3'b110
+`define LSU_SW 3'b111
+
 `endif
