@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`include "rv32_opcodes.vh"
+`include "../include/rv32_opcodes.vh"
 
 module ALU_MUX (
     input wire [31:0] pc_ex,
