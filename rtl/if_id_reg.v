@@ -14,7 +14,7 @@ module if_id_reg (
 
     output reg [31:0] pc_next_d,
     output reg [31:0] pc_d,
-    output reg [31:0] instr_e
+    output reg [31:0] instr_d
 );
 
     always @(posedge(clk_i) or posedge(rst_i)) begin

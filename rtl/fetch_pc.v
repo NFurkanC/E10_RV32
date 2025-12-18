@@ -24,7 +24,7 @@ module fetch (
     end
 
     if (pc_w_en) begin
-      assign reg_pc_out = reg_pc_in;
+      reg_pc_out <= reg_pc_in;
     end
     else begin
       instr_decode_out <= instr_fetch_in;

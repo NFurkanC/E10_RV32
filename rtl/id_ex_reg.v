@@ -6,22 +6,25 @@ module id_ex_reg (
 
     input wire       flush_ex,
 
-    input      [3:0] alu_op_d,
-    input reg [31:0] reg_1_d,
-    input reg [31:0] reg_2_d,
-    input reg [31:0] imm_data_d,
-    input reg [31:0] pc_d,
-    input reg [31:0] pc_next_d,
+    input wire [3:0] alu_op_d,
+    input wire [31:0] reg_1_d,
+    input wire [31:0] reg_2_d,
+    input wire [31:0] imm_data_d,
+    input wire [31:0] pc_d,
+    input wire [31:0] pc_next_d,
 
     input wire [1:0] alu_mux_sel_d,
     input wire [4:0] reg_dest_addr_d,
     input wire       mem_write_sel_d,
     input wire [2:0] result_mux_sel_d,
     input wire       reg_write_d,
+    input wire [31:0] branch_data_d,
+    input wire [31:0] jump_addr_d,
+    input wire [2:0] lsu_op_d, 
 
     //OUTPUTS
     
-    output     [3:0]    alu_op_ex,
+    output reg [3:0]    alu_op_ex,
     output reg [31:0]   reg_1_ex,
     output reg [31:0]   reg_2_ex,
     output reg [31:0]   imm_data_ex,
@@ -32,7 +35,10 @@ module id_ex_reg (
     output wire [4:0]   reg_dest_addr_ex,
     output wire         mem_write_sel_ex,
     output wire [2:0]   result_mux_sel_ex,
-    output wire         reg_write_ex
+    output wire         reg_write_ex,
+    output wire [31:0]  branch_data_ex,
+    output wire [31:0]  jump_addr_ex,
+    output wire [2:0]   lsu_op_ex
 );
 
     always *(posedge(clk_i) or posedge(rst_i)) begin
@@ -49,6 +55,9 @@ module id_ex_reg (
             mem_write_sel_ex <= 1'b0;
             result_mux_sel_ex <= 3'b0;
             reg_write_ex <= 1'b0;
+            branch_data_ex <= 32'b0;
+            jump_addr_ex <= 32'b0;
+            lsu_op_ex <= 3'b0;
         end
         else begin
             alu_op_ex <= alu_op_d;
@@ -63,6 +72,10 @@ module id_ex_reg (
             mem_write_sel_ex <= mem_write_sel_d;
             result_mux_sel_ex <= result_mux_sel_d;
             reg_write_ex <= reg_write_d;
+            branch_data_ex <= branch_data_d;
+            jump_addr_ex <= jump_addr_d;
+            lsu_op_ex <= lsu_op_d;  
+
         end
     end
 
