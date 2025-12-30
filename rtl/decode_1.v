@@ -119,7 +119,7 @@ module decode_controller (
     //000 -> register access
     //001 -> mem access
     //010 -> PC access
-    //011 -> Branch access
+    //011 -> Branch 
 
     //reg_sel bit structure
     //REG_SEL [RS2|RS1];

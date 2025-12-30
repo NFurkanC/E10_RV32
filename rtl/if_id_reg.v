@@ -4,7 +4,6 @@ module if_id_reg (
     input wire clk_i,
     input wire rst_i,
 
-    //Control Signals
     input wire stall_d,
     input wire flush_d,
 

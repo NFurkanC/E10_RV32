@@ -1,6 +1,4 @@
-//INCOMPLETE - NEEDS FULL REWRITE
-//FIRST THING TO REWRITE FOR THE PIPELINED STRUCTURE
-//WILL NOT ADD TO RTL FOLDER UNTIL COMPLETED
+//UNDER TEST - PARTLY INCOMPLETE
 
 `include "../include/rv32_opcodes.vh"
 //for now we'll use pc as our first fetch reg. on phase 2, we'll implement prefetch buffer.
@@ -14,6 +12,7 @@ module fetch (
   input [31:0]        instr_fetch_in,
   input wire          pc_w_en,
   input wire [31:0]   reg_pc_in,
+  output reg [31:0]   mem_pc_out,
   output reg [31:0]   reg_pc_out,
   output reg [31:0]   instr_decode_out
 );
