@@ -7,7 +7,7 @@ A basic RV32 core for embedded systems. It is planned to be an RV32IMAF core.
 ## Modules below are partly incomplete:
 - ALU
 - LSU
-These modules are labeled basic, as they only work enough to test the CPU. They will be improved once simulation tests are finalized and design is loaded onto the FPGA.
+- **Note:** These modules are labeled with append `_basic` , as they only work enough to test the CPU. They will be improved once simulation tests are finalized and design is loaded onto the FPGA.
 
 ## TO-DO
 - Add simulation and synthesis scripts.
