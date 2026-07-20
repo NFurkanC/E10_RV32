@@ -15,14 +15,13 @@ module pc_reg_addr_mux #(
             pc_o <= PC_BOOT_ADDR;
         end
         else begin
-            case (pc_mux_i)
+            unique case (pc_mux_i)
                 1'b0: begin
                     pc_o <= pc_o + 4;
                 end 
                 1'b1: begin
-                    pc_o <= pc_o + offset_add_i;
+                    pc_o <= offset_add_i;
                 end
-                default: pc_o <= pc_o;
             endcase
         end
     end

@@ -28,7 +28,6 @@ import e10_base_pkg::*;
             endcase    
         end
     end
-
 endmodule
 
 module alu_mux
@@ -58,5 +57,4 @@ import e10_base_pkg::*;
             alu_en_o = 1'b1;
         end
     end
-    
 endmodule

@@ -35,7 +35,7 @@ typedef enum logic[1:0]{
     RESULT_MUX_R = 2'b00,
     RESULT_MUX_MEM = 2'b01,
     RESULT_MUX_PC = 2'b10,
-    RESULT_MUX_NONE = 2'b11
-} result_mux; //rest are reserved
+    RESULT_MUX_J = 2'b11
+} result_mux; 
 
 endpackage
