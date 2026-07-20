@@ -28,7 +28,11 @@ module ALU_MUX (
                 alu_data_1_out <= pc_ex;
                 alu_data_2_out <= reg_1_in;
             end
-        endcase;
+            default: begin
+                alu_data_1_out <= 0;
+                alu_data_2_out <= 0;
+            end
+        endcase
     end
 
 endmodule
@@ -53,7 +57,7 @@ module ALU (
             `ALU_SLT: alu_result_out = ($signed(data_1_in) < $signed(data_2_in)) ? 32'b1 : 32'b0;
             `ALU_SLTA: alu_result_out = (data_1_in < data_2_in) ? 32'b1 : 32'b0;
             default: alu_result_out = 32'b0;
-        endcase;
+        endcase
         alu_zero_out = (alu_result_out == 32'b0);
     end 
 

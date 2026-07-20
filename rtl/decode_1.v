@@ -98,7 +98,7 @@ module decode_seperator (
 
 endmodule
 
-module decode_controller (
+module decode_controller_old (
     input wire [31:0] instr_in,
 
     output wire [3:0] alu_op,
