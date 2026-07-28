@@ -1,110 +1,3 @@
-module id_top 
-import e10_base_pkg::*;
-(
-    //input logic [31:0]  pc_d_i,
-    input logic [31:0]  instr_d_i,
-    
-    output logic [31:0] imm_x_o,
-    output logic [2:0]  funct3_x_o,
-    output alu_subopcodes  alu_subopcode_x_o,
-    output logic        lsu_funct_en_x_o,
-    output result_mux  wb_target_x_o,
-    output logic        alu_src_a_x_o,
-    output logic        alu_src_b_x_o,
-    
-    output logic [4:0]  rs1_addr_regfile,
-    output logic [4:0]  rs2_addr_regfile,
-    output logic [4:0]  rd_addr_regfile,
-
-    output logic        branch_in_pipe_o
-);
-    logic [6:0] opcode;
-    logic [2:0] funct3;
-    logic [6:0] funct7;
-    
-    instr_field_gen instr_field_gen (
-        .instr_i (instr_d_i),
-        .opcode  (opcode),
-        .rd_addr (rd_addr_regfile),
-        .funct3  (funct3),
-        .rs1_addr(rs1_addr_regfile),
-        .rs2_addr(rs2_addr_regfile),
-        .funct7  (funct7),
-        .imm     (imm_x_o)
-    );
-
-    decode_controller decode_controller (
-        .opcode_i       (opcode),
-        .funct3_i       (funct3),
-        .funct7_i       (funct7),
-        .alu_subopcode_o(alu_subopcode_x_o),
-        .lsu_funct_en_o (lsu_funct_en_x_o),
-        .wb_target_o    (wb_target_x_o),
-        .alu_src_a      (alu_src_a_x_o),
-        .alu_src_b      (alu_src_b_x_o),
-        .branch_in_pipe_o(branch_in_pipe_o)
-    );
-
-    assign funct3_x_o = funct3;
-endmodule
-
-module instr_field_gen
-import e10_base_pkg::*;
-(
-    input logic [31:0]  instr_i,
-
-    output logic [6:0]  opcode,
-    output logic [4:0]  rd_addr,
-    output logic [2:0]  funct3,
-    output logic [4:0]  rs1_addr,
-    output logic [4:0]  rs2_addr,
-    output logic [6:0]  funct7,
-    output logic [31:0] imm
-);
-
-assign opcode = instr_i[6:0];
-
-always_comb begin
-    rd_addr = instr_i[11:7];
-    funct3 = instr_i[14:12];
-    rs1_addr = instr_i[19:15];
-    rs2_addr = instr_i[24:20];
-    funct7 = instr_i[31:25];
-    imm = 32'b0;
-    unique case(opcode)
-        OPCODE_OP: begin
-            rd_addr = instr_i[11:7];
-            funct3 = instr_i[14:12];
-            rs1_addr = instr_i[19:15];
-            rs2_addr = instr_i[24:20];
-            funct7 = instr_i[31:25];
-        end 
-        OPCODE_OP_IMM: begin
-            imm = {{20{instr_i[31]}}, instr_i[31:20]};
-        end
-        OPCODE_STORE: begin
-            imm = {{20{instr_i[31]}}, instr_i[31:25], instr_i[11:7]};
-        end
-        OPCODE_BRANCH: begin
-            imm = {{20{instr_i[31]}}, instr_i[7], instr_i[30:25], instr_i[11:8], 1'b0 };
-        end
-        OPCODE_LUI: begin
-            imm = {instr_i[31:12],12'b0};
-        end
-        OPCODE_AUIPC: begin
-            imm = {instr_i[31:12],12'b0};
-        end
-        OPCODE_JAL: begin
-            imm = {{12{instr_i[31]}}, instr_i[19:12], instr_i[20], instr_i[30:21], 1'b0 };
-        end
-        OPCODE_JALR: begin
-            imm = {{20{instr_i[31]}}, instr_i[31:20]};
-        end
-    endcase
-end
-    
-endmodule
-
 module decode_controller
 import e10_base_pkg::*;
 (
@@ -124,17 +17,19 @@ import e10_base_pkg::*;
         alu_subopcode_o = ALU_NONE;
         lsu_funct_en_o = 1'b0;
         wb_target_o = RESULT_MUX_R;
-        alu_src_a = 0; // 0 = rs1, 1 = pc
-        alu_src_b = 0; // 0 = rs2, 1 = imm
-        branch_in_pipe_o = 0;
+        alu_src_a = 1'b0; // 0 = rs1, 1 = pc
+        alu_src_b = 1'b0; // 0 = rs2, 1 = imm
+        branch_in_pipe_o = 1'b0;
         case (opcode_i)
             OPCODE_AUIPC: begin
                 alu_subopcode_o = ALU_ADD;
                 wb_target_o = RESULT_MUX_R;
-                alu_src_a = 1;
+                alu_src_a = 1'b1;
             end
             OPCODE_LUI: begin
+                alu_subopcode_o = ALU_ADD;
                 wb_target_o = RESULT_MUX_R;
+                alu_src_b = 1'b1;
             end
             OPCODE_OP: begin
                 wb_target_o = RESULT_MUX_R;
@@ -194,12 +89,14 @@ import e10_base_pkg::*;
                 alu_subopcode_o = ALU_ADD;
                 alu_src_a = 1'b1;
                 alu_src_b = 1'b1;
+                branch_in_pipe_o = 1'b1;
             end
             OPCODE_JALR: begin
                 wb_target_o = RESULT_MUX_J;
                 alu_subopcode_o = ALU_ADD;
                 alu_src_a = 1'b0;
                 alu_src_b = 1'b1;
+                branch_in_pipe_o = 1'b1;
             end
             default: ;
         endcase

@@ -28,6 +28,7 @@ module pipeline_controller
         else if (branch_taken_i) begin
             flush_d = 1'b1;
             flush_f = 1'b1;
+            flush_x = 1'b1;
         end
         else if (branch_in_pipe) begin
             stall_f = 1'b1;

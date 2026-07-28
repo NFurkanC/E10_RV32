@@ -1,5 +1,5 @@
-module core_top
 import e10_base_pkg::*;
+module core_top
 (
     input logic             clk_i,
     input logic             rst_i,
@@ -19,7 +19,7 @@ import e10_base_pkg::*;
     logic [31:0]            instr_fd;
 
     //DECODE SIGNALS
-    logic [31:0]            instr_dd;
+    (* dont_touch ="true" *) logic [31:0]            instr_dd;
     logic [31:0]            pc_dx;
     logic [31:0]            imm_dx;
     logic [2:0]             funct3_dx;
@@ -50,10 +50,19 @@ import e10_base_pkg::*;
     result_mux              wb_target_ex;
     logic                   alu_src_a_ex;
     logic                   alu_src_b_ex;
+    logic [4:0]             rd_addr_ex;
+    logic [4:0]             rd_addr_ex_in;
 
     //PIPELINE SIGNALS
     logic                   stall_lsu;
     logic                   branch_taken;
+    logic                   stall_f;
+    logic                   stall_d;
+    logic                   stall_x;
+    logic                   flush_f;
+    logic                   flush_d;
+    logic                   flush_x;
+
 
     fetch_top fetch_top (
         .clk_i       (clk_i),
@@ -99,7 +108,7 @@ import e10_base_pkg::*;
         .rst_i     (rst_i),
         .rs1_addr_i(rs1_addr_regfile),
         .rs2_addr_i(rs2_addr_regfile),
-        .rd_addr_i (rd_addr_regfile),
+        .rd_addr_i (rd_addr_ex),
         .rd_data_i (rd_data),
         .write_en_i(reg_wen),
         .rs1_data_o(rs1_data),
@@ -121,6 +130,8 @@ import e10_base_pkg::*;
         .wb_target_x_i    (wb_target_dx),
         .alu_src_a_x_i    (alu_src_a_dx),
         .alu_src_b_x_i    (alu_src_b_dx),
+        .rd_addr_i        (rd_addr_regfile),
+        .rd_addr_o        (rd_addr_ex_in),
         .pc_x_o           (pc_ex),
         .imm_x_o          (imm_ex),
         .rs1_data_x_o     (rs1_data_ex),
@@ -145,6 +156,7 @@ import e10_base_pkg::*;
         .alu_src_a_i      (alu_src_a_ex),
         .alu_src_b_i      (alu_src_b_ex),
         .mem_data_i       (mem_data_i),
+        .rd_addr_i        (rd_addr_ex_in),
         .pc_o             (pc_offset),
         .reg_data_o       (rd_data),
         .mem_data_o       (mem_data_o),
@@ -152,6 +164,7 @@ import e10_base_pkg::*;
         .mem_wen_o        (mem_wen_o),
         .pc_wen_o         (pc_mux_sel),
         .reg_wen_o        (reg_wen),
+        .rd_addr_o        (rd_addr_ex),
         .stall_o          (stall_lsu),
         .branch_taken_o   (branch_taken)
     );

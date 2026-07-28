@@ -1,5 +1,5 @@
-module wb_mux_top 
 import e10_base_pkg::*;
+module wb_mux_top 
 (
     input result_mux    wb_i,
     input logic         branch_valid_i,
@@ -43,6 +43,7 @@ import e10_base_pkg::*;
                 pc_o = data_i;
                 pc_wen_o = 1'b1;
                 reg_wen_o = 1'b1;
+                branch_stall = 1'b1;
             end
         endcase
     end

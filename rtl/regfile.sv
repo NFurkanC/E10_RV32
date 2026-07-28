@@ -13,12 +13,12 @@ module regfile
     output logic [31:0] rs2_data_o
 );
 
-    reg [31:0] registers[31:0];
+    (* dont_touch = "true" *) logic [31:0] registers[31:0];
     always_ff @(posedge clk_i or posedge rst_i) begin
         if(rst_i) begin
             registers <= '{default: '0};
         end
-        else if (write_en_i && (rd_addr_i == 5'b0)) begin
+        else if (write_en_i && (rd_addr_i != 5'b0)) begin
             registers[rd_addr_i] <= rd_data_i;
         end
     end

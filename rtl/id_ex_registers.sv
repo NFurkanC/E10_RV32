@@ -1,5 +1,5 @@
-module id_ex_registers 
 import e10_base_pkg::*;
+module id_ex_registers 
 (
 
     input logic         clk_i,
@@ -20,7 +20,9 @@ import e10_base_pkg::*;
     input result_mux    wb_target_x_i,
     input logic         alu_src_a_x_i,
     input logic         alu_src_b_x_i,
+    input logic [4:0]   rd_addr_i,
 
+    output logic [4:0]  rd_addr_o,
     output logic [31:0] pc_x_o,
     output logic [31:0] imm_x_o,
     output logic [31:0] rs1_data_x_o,
@@ -45,6 +47,7 @@ import e10_base_pkg::*;
             wb_target_x_o <= RESULT_MUX_R;
             alu_src_a_o <= 1'b0;
             alu_src_b_o <= 1'b0;
+            rd_addr_o <= 5'b0;
         end
         else if (flush_x) begin
             pc_x_o <= 32'b0;
@@ -57,6 +60,7 @@ import e10_base_pkg::*;
             wb_target_x_o <= RESULT_MUX_R;
             alu_src_a_o <= 1'b0;
             alu_src_b_o <= 1'b0;
+            rd_addr_o <= 5'b0;
         end
         else if (!stall_x) begin
             pc_x_o <= pc_x_i;
@@ -69,6 +73,7 @@ import e10_base_pkg::*;
             wb_target_x_o <= wb_target_x_i;
             alu_src_a_o <= alu_src_a_x_i;
             alu_src_b_o <= alu_src_b_x_i;
+            rd_addr_o <= rd_addr_i;
         end
     end
     

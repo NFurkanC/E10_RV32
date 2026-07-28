@@ -1,5 +1,5 @@
-module ex_top
 import e10_base_pkg::*;
+module ex_top
 (
     input logic [31:0] pc_x_i,
     input logic [31:0] imm_x_i,
@@ -13,6 +13,7 @@ import e10_base_pkg::*;
     input logic        alu_src_b_i,
 
     input logic [31:0]  mem_data_i,
+    input logic [4:0]   rd_addr_i,
 
     output logic [31:0] pc_o,
     output logic [31:0] reg_data_o,
@@ -22,6 +23,7 @@ import e10_base_pkg::*;
     output logic        pc_wen_o,
     output logic        reg_wen_o,
 
+    output logic [4:0]  rd_addr_o,
     output logic        stall_o,
     output logic        branch_taken_o
 );
@@ -35,6 +37,7 @@ import e10_base_pkg::*;
     logic           data_source_sel;
 
     assign data_source_sel = (wb_target_x_i == RESULT_MUX_R) && (lsu_funct_en_x_i == 1'b1);
+    assign rd_addr_o = rd_addr_i;
 
     alu_mux alu_mux (
         .pc_i           (pc_x_i),
@@ -49,7 +52,7 @@ import e10_base_pkg::*;
         .alu_en_o       (alu_en)
     );
 
-    alu_basic alu_basic (
+    alu_basic u_alu_basic (
         .operand_1(alu_operand_1),
         .operand_2(alu_operand_2),
         .subopcode(alu_subopcode_x_i),
