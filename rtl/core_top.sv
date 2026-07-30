@@ -31,7 +31,6 @@ module core_top
     logic [4:0]             rs1_addr_regfile;
     logic [4:0]             rs2_addr_regfile;
     logic [4:0]             rd_addr_regfile;
-    logic                   branch_in_pipe;
     
     //REGFILE SIGNALS
     logic [31:0]            rd_data;
@@ -68,6 +67,7 @@ module core_top
         .clk_i       (clk_i),
         .rst_i       (rst_i),
         .stall_f     (stall_f),
+        .stall_d     (stall_d),
         .flush_f     (flush_f),
         .pc_mux_sel_i(pc_mux_sel),
         .instr_mem_i (instr_data_i),
@@ -99,8 +99,7 @@ module core_top
         .alu_src_b_x_o    (alu_src_b_dx),
         .rs1_addr_regfile (rs1_addr_regfile),
         .rs2_addr_regfile (rs2_addr_regfile),
-        .rd_addr_regfile  (rd_addr_regfile),
-        .branch_in_pipe_o (branch_in_pipe)
+        .rd_addr_regfile  (rd_addr_regfile)
     );
 
     regfile regfile (
@@ -171,8 +170,11 @@ module core_top
 
     pipeline_controller pipeline_controller (
         .stall_lsu_i   (stall_lsu),
-        .branch_in_pipe(branch_in_pipe),
         .branch_taken_i(branch_taken),
+        .rs1_addr_d    (rs1_addr_regfile),
+        .rs2_addr_d    (rs2_addr_regfile),
+        .rd_addr_x     (rd_addr_ex),
+        .reg_wen_en    (reg_wen),
         .stall_f       (stall_f),
         .stall_d       (stall_d),
         .stall_x       (stall_x),

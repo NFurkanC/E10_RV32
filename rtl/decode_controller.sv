@@ -9,8 +9,7 @@ import e10_base_pkg::*;
     output logic        lsu_funct_en_o,
     output result_mux   wb_target_o,
     output logic        alu_src_a,
-    output logic        alu_src_b,
-    output logic        branch_in_pipe_o
+    output logic        alu_src_b
 );
     
     always_comb begin
@@ -19,7 +18,6 @@ import e10_base_pkg::*;
         wb_target_o = RESULT_MUX_R;
         alu_src_a = 1'b0; // 0 = rs1, 1 = pc
         alu_src_b = 1'b0; // 0 = rs2, 1 = imm
-        branch_in_pipe_o = 1'b0;
         case (opcode_i)
             OPCODE_AUIPC: begin
                 alu_subopcode_o = ALU_ADD;
@@ -73,6 +71,7 @@ import e10_base_pkg::*;
             end
             OPCODE_STORE: begin
                 wb_target_o = RESULT_MUX_MEM;
+                alu_subopcode_o = ALU_ADD;
                 alu_src_a = 1'b0;
                 alu_src_b = 1'b1;
                 lsu_funct_en_o = 1'b1; //pass funct3 to LSU 
@@ -82,21 +81,18 @@ import e10_base_pkg::*;
                 alu_subopcode_o = ALU_ADD;
                 alu_src_a = 1'b1;
                 alu_src_b = 1'b1;
-                branch_in_pipe_o = 1'b1;
             end 
             OPCODE_JAL: begin
                 wb_target_o = RESULT_MUX_J;
                 alu_subopcode_o = ALU_ADD;
                 alu_src_a = 1'b1;
                 alu_src_b = 1'b1;
-                branch_in_pipe_o = 1'b1;
             end
             OPCODE_JALR: begin
                 wb_target_o = RESULT_MUX_J;
                 alu_subopcode_o = ALU_ADD;
                 alu_src_a = 1'b0;
                 alu_src_b = 1'b1;
-                branch_in_pipe_o = 1'b1;
             end
             default: ;
         endcase

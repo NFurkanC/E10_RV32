@@ -14,9 +14,7 @@ import e10_base_pkg::*;
     
     output logic [4:0]  rs1_addr_regfile,
     output logic [4:0]  rs2_addr_regfile,
-    output logic [4:0]  rd_addr_regfile,
-
-    output logic        branch_in_pipe_o
+    output logic [4:0]  rd_addr_regfile
 );
     logic [6:0] opcode;
     logic [2:0] funct3;
@@ -41,8 +39,7 @@ import e10_base_pkg::*;
         .lsu_funct_en_o (lsu_funct_en_x_o),
         .wb_target_o    (wb_target_x_o),
         .alu_src_a      (alu_src_a_x_o),
-        .alu_src_b      (alu_src_b_x_o),
-        .branch_in_pipe_o(branch_in_pipe_o)
+        .alu_src_b      (alu_src_b_x_o)
     );
 
     assign funct3_x_o = funct3;
