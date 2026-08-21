@@ -23,6 +23,7 @@ import e10_base_pkg::*;
                 alu_subopcode_o = ALU_ADD;
                 wb_target_o = RESULT_MUX_R;
                 alu_src_a = 1'b1;
+                alu_src_b = 1'b1;
             end
             OPCODE_LUI: begin
                 alu_subopcode_o = ALU_ADD;
@@ -32,7 +33,7 @@ import e10_base_pkg::*;
             OPCODE_OP: begin
                 wb_target_o = RESULT_MUX_R;
                 unique case(funct3_i)
-                    3'b000: alu_subopcode_o = (funct7_i == 7'b0110000) ? ALU_SUB : ALU_ADD;
+                    3'b000: alu_subopcode_o = (funct7_i == 7'b0100000) ? ALU_SUB : ALU_ADD;
                     3'b001: alu_subopcode_o = ALU_SLL;
                     3'b010: alu_subopcode_o = ALU_SLT;
                     3'b011: alu_subopcode_o = ALU_SLTU;
@@ -52,14 +53,8 @@ import e10_base_pkg::*;
                     3'b100: alu_subopcode_o = ALU_XOR;
                     3'b110: alu_subopcode_o = ALU_OR;
                     3'b111: alu_subopcode_o = ALU_AND;
-                    3'b001: begin
-                     alu_subopcode_o = ALU_SLL;
-                        alu_src_b = 1'b0;
-                    end
-                    3'b101: begin
-                     alu_subopcode_o = (funct7_i == 7'b0100000) ? ALU_SRA : ALU_SRL;
-                        alu_src_b = 1'b0;
-                    end 
+                    3'b001: alu_subopcode_o = ALU_SLL;
+                    3'b101: alu_subopcode_o = (funct7_i == 7'b0100000) ? ALU_SRA : ALU_SRL; 
                 endcase
             end
             OPCODE_LOAD: begin
